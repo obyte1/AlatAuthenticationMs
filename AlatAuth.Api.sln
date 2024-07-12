@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Api", "AlatAuth.Api\AlatAuth.Api.csproj", "{E4B41F75-57E9-4223-877E-B1F4932BC3A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Common", "AlatAuth.Common\AlatAuth.Common.csproj", "{D5199701-D591-4214-84D0-0182984888BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Data", "AlatAuth.Data\AlatAuth.Data.csproj", "{196DF7B1-D242-45D8-B818-54FB0AB3AC81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Business", "AlatAuth.Business\AlatAuth.Business.csproj", "{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4B41F75-57E9-4223-877E-B1F4932BC3A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4B41F75-57E9-4223-877E-B1F4932BC3A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4B41F75-57E9-4223-877E-B1F4932BC3A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4B41F75-57E9-4223-877E-B1F4932BC3A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5199701-D591-4214-84D0-0182984888BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5199701-D591-4214-84D0-0182984888BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5199701-D591-4214-84D0-0182984888BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5199701-D591-4214-84D0-0182984888BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{196DF7B1-D242-45D8-B818-54FB0AB3AC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{196DF7B1-D242-45D8-B818-54FB0AB3AC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{196DF7B1-D242-45D8-B818-54FB0AB3AC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{196DF7B1-D242-45D8-B818-54FB0AB3AC81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6D1560D-9A3D-425B-B01F-E06615AF7D1C}
+	EndGlobalSection
+EndGlobal
