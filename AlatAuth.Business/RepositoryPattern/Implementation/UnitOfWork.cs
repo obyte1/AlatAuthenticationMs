@@ -1,4 +1,5 @@
-﻿using AlatAuth.Common.RepositoryPattern.Interface;
+﻿using AlatAuth.Business.Interface;
+using AlatAuth.Common.RepositoryPattern.Interface;
 using AlatAuth.Data.DataAccess;
 using AlatAuth.Data.Interface;
 using System;
@@ -9,13 +10,16 @@ namespace AlatAuth.Common.RepositoryPattern.Implementation
     {
         private readonly AppDbContext _context;
 
-        public UnitOfWork(AppDbContext context, ICustomerRepo customerRepo )
+        public UnitOfWork(AppDbContext context, ICustomerRepo customerRepo, IOtpRepo otpRepo)
         {
             this._context = context;
+            this.Otp = otpRepo;
             this.CustomerRepo = customerRepo;
         }
 
         public ICustomerRepo CustomerRepo { get; private set; }
+        public IOtpRepo Otp { get; private set; }
+
 
         public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
         public async void Cancel() => await _context.DisposeAsync();
