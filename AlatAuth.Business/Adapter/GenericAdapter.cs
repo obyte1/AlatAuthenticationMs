@@ -10,7 +10,19 @@ using System.Text;
 
 namespace AlatAuth.Business.Adapter
 {
-    public class GenericAdapter
+    public interface IGenericAdapter
+    {
+        IHttpClientFactory httpClient { get; set; }
+        ResponseDto responseModel { get; set; }
+
+        void Dispose();
+        Task<HttpResponseMessage> SendAsync(APIRequestModel apiRequest);
+        Task<T> SendAsync<T>(APIRequestModel apiRequest);
+        string UserId();
+        string UserRole();
+    }
+
+    public class GenericAdapter : IGenericAdapter
     {
         private readonly IHttpContextAccessor httpContext;
         public ResponseDto responseModel { get; set; }

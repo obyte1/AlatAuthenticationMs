@@ -20,8 +20,8 @@ namespace AlatAuth.Business.Service.Implementation
 
         public async Task<ApiResponse> CreateCustomer(CustomerRequest request)
         {
-            var existingCustomer = await _unitOfWork.CustomerRepo.GetFirstOrDefaultAsync(filter: x => x.PhoneNumber == request.PhoneNumber);
-            if (existingCustomer != null)
+            var existingCustomer = await _unitOfWork.CustomerRepo.AnyAsync(x => x.PhoneNumber == request.PhoneNumber);
+            if (existingCustomer)
             {
                 return ResponseHandler.FailureResponse("400", "Phone number already Exist");
             }
@@ -43,6 +43,7 @@ namespace AlatAuth.Business.Service.Implementation
                     StateOfResidenceId = request.StateOfResidenceId,
                     LGAId = request.LGAId,
                     ProgressState = ProgressState.Initiated,
+                    FullName = request.FullName
                 };
 
                 _unitOfWork.CustomerRepo.Add(newCustomer);
@@ -79,7 +80,7 @@ namespace AlatAuth.Business.Service.Implementation
 
         public async Task<ApiResponse> GetCustomers(int pageNumber, int pageSize)
         {
-            var customers = await _unitOfWork.CustomerRepo.GetAll();
+            var customers = await _unitOfWork.CustomerRepo.GetAllAsyncByDesc(orderBy: x=>x.Id, includeProperties: "StateOfResidence,LGA");
 
             var customersCount = customers.Count();
             // Get the paginated list of customers
@@ -96,6 +97,7 @@ namespace AlatAuth.Business.Service.Implementation
                 PageNumber = pageNumber,
                 Customers = customers.Adapt<List<CustomerResponse>>()
             };
+
             return ResponseHandler.SuccessResponse("Customers retrieved successfully", response);
         }
 

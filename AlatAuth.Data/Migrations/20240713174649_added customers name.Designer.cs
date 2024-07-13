@@ -4,6 +4,7 @@ using AlatAuth.Data.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlatAuth.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240713174649_added customers name")]
+    partial class addedcustomersname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,7 +72,7 @@ namespace AlatAuth.Data.Migrations
 
                     b.HasIndex("StateOfResidenceId");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("AlatAuth.Data.Entity.LGA", b =>
@@ -99,7 +102,7 @@ namespace AlatAuth.Data.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("LGAs", (string)null);
+                    b.ToTable("LGAs");
                 });
 
             modelBuilder.Entity("AlatAuth.Data.Entity.OTPEntity", b =>
@@ -145,7 +148,7 @@ namespace AlatAuth.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OTPs", (string)null);
+                    b.ToTable("OTPs");
                 });
 
             modelBuilder.Entity("AlatAuth.Data.Entity.State", b =>
@@ -170,7 +173,7 @@ namespace AlatAuth.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("States", (string)null);
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("AlatAuth.Data.Entity.Customer", b =>

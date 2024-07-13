@@ -8,13 +8,15 @@ using Microsoft.Extensions.Configuration;
 
 namespace AlatAuth.Business.Service.Implementation
 {
-    public class BankService : GenericAdapter, IBankService
+    public class BankService : IBankService
     {
         private readonly IConfiguration _configuration;
-        public BankService(IHttpClientFactory httpClient, IHttpContextAccessor httpContext, IConfiguration configuration)
-            : base(httpClient, httpContext)
+        private readonly IGenericAdapter _genericAdapter;
+        public BankService(IGenericAdapter genericAdapter, IConfiguration configuration)
+           
         {
             _configuration = configuration;
+            _genericAdapter = genericAdapter;
         }
 
         public async Task<ApiResponse> GetBanks()
@@ -24,7 +26,7 @@ namespace AlatAuth.Business.Service.Implementation
                 ApiType = ApiType.Get,
                 Url = _configuration["Alat:AlatBaseUrl"] + "GetAllBanks"
             };
-            var banks = await this.SendAsync<GetBankResponseDto>(requestModel);
+            var banks = await _genericAdapter.SendAsync<GetBankResponseDto>(requestModel);
           return ResponseHandler.SuccessResponse("Bank list fetched successfully!",banks.result);
         }
     }

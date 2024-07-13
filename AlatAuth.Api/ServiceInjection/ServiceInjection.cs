@@ -78,6 +78,7 @@ namespace AlatAuth.Api.ServiceInjection
             services.AddScoped<ILgaRepo, LgaRepo>();
             services.AddScoped<IStateRepo, StateRepo>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IGenericAdapter,GenericAdapter>();
 
 
             services.AddHttpClient<GenericAdapter>();

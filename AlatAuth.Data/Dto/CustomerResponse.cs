@@ -1,9 +1,4 @@
 ﻿using AlatAuth.Common.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlatAuth.Data.Dto
 {
@@ -13,12 +8,24 @@ namespace AlatAuth.Data.Dto
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string StateOfResidence { get; set; }
-        public string LGA { get; set; }
+        public string FullName { get; set; }
+        public StateDto StateOfResidence { get; set; }
+        public LGADto LGA { get; set; }
         public bool IsVerified { get; set; } = false;
         public ProgressState ProgressState { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public bool IsDeleted { get; set; } 
+        public bool IsDeleted { get; set; }
+    }
+
+    public class StateDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class LGADto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

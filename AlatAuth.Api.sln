@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Api", "AlatAuth.Api\AlatAuth.Api.csproj", "{E4B41F75-57E9-4223-877E-B1F4932BC3A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlatAuth.Api", "AlatAuth.Api\AlatAuth.Api.csproj", "{E4B41F75-57E9-4223-877E-B1F4932BC3A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Common", "AlatAuth.Common\AlatAuth.Common.csproj", "{D5199701-D591-4214-84D0-0182984888BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlatAuth.Common", "AlatAuth.Common\AlatAuth.Common.csproj", "{D5199701-D591-4214-84D0-0182984888BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Data", "AlatAuth.Data\AlatAuth.Data.csproj", "{196DF7B1-D242-45D8-B818-54FB0AB3AC81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlatAuth.Data", "AlatAuth.Data\AlatAuth.Data.csproj", "{196DF7B1-D242-45D8-B818-54FB0AB3AC81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Business", "AlatAuth.Business\AlatAuth.Business.csproj", "{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlatAuth.Business", "AlatAuth.Business\AlatAuth.Business.csproj", "{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CF84B3BB-0A58-42C2-B15D-1FDC48605DF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlatAuth.Business.Tests", "AlatAuth.Business.Tests\AlatAuth.Business.Tests.csproj", "{EA864C39-A83E-4FCF-87EA-C269280C1CCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEAC62DA-430E-4B94-BBC5-DBCFF283C198}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA864C39-A83E-4FCF-87EA-C269280C1CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA864C39-A83E-4FCF-87EA-C269280C1CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA864C39-A83E-4FCF-87EA-C269280C1CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA864C39-A83E-4FCF-87EA-C269280C1CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EA864C39-A83E-4FCF-87EA-C269280C1CCF} = {CF84B3BB-0A58-42C2-B15D-1FDC48605DF0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6D1560D-9A3D-425B-B01F-E06615AF7D1C}
