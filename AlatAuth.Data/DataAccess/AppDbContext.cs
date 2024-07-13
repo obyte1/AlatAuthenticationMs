@@ -1,10 +1,5 @@
 ﻿using AlatAuth.Data.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlatAuth.Data.DataAccess
 {
@@ -14,5 +9,8 @@ namespace AlatAuth.Data.DataAccess
         {
         }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<LGA> LGAs { get; set; }
+        public DbSet<OTPEntity> OTPs { get; set; }
     }
 }

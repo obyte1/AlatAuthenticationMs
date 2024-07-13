@@ -10,15 +10,19 @@ namespace AlatAuth.Common.RepositoryPattern.Implementation
     {
         private readonly AppDbContext _context;
 
-        public UnitOfWork(AppDbContext context, ICustomerRepo customerRepo, IOtpRepo otpRepo)
+        public UnitOfWork(AppDbContext context, ICustomerRepo customerRepo, IOtpRepo otpRepo, IStateRepo stateRepo, ILgaRepo lgaRepo)
         {
             this._context = context;
             this.Otp = otpRepo;
             this.CustomerRepo = customerRepo;
+            this.stateRepo = stateRepo;
+            this.LgaRepo = lgaRepo;
         }
 
         public ICustomerRepo CustomerRepo { get; private set; }
         public IOtpRepo Otp { get; private set; }
+        public IStateRepo stateRepo { get; private set; }
+        public ILgaRepo LgaRepo { get; private set; }
 
 
         public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();

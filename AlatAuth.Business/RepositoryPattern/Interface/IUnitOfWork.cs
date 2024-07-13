@@ -13,6 +13,8 @@ namespace AlatAuth.Common.RepositoryPattern.Interface
     {
         ICustomerRepo CustomerRepo { get; }
         IOtpRepo Otp { get; }
+        IStateRepo stateRepo { get; }
+        ILgaRepo LgaRepo { get; }
 
         Task<int> SaveChangesAsync();
         Task BeginTransaction();

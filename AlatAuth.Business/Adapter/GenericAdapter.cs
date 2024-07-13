@@ -24,7 +24,7 @@ namespace AlatAuth.Business.Adapter
 
         public async Task<T> SendAsync<T>(APIRequestModel apiRequest)
         {
-            var scope = httpContext.HttpContext.RequestServices.CreateScope();
+            var scope = httpContext.HttpContext!.RequestServices.CreateScope();
             var _logger = scope.ServiceProvider.GetRequiredService<ILogger<GenericAdapter>>();
             try
             {
@@ -50,7 +50,7 @@ namespace AlatAuth.Business.Adapter
                 if (!string.IsNullOrEmpty(apiRequest.xKey))
                     client.DefaultRequestHeaders.Add("x-api-key", apiRequest.xKey);
 
-                HttpResponseMessage apiResponse = null;
+                HttpResponseMessage apiResponse = null!;
                 switch (apiRequest.ApiType)
                 {
 
@@ -70,7 +70,7 @@ namespace AlatAuth.Business.Adapter
                 apiResponse = await client.SendAsync(message);
                 string apiContent = await apiResponse.Content.ReadAsStringAsync();
                 _logger.Log(LogLevel.Information, apiContent);
-                T apiResponseDto = JsonConvert.DeserializeObject<T>(apiContent);
+                T apiResponseDto = JsonConvert.DeserializeObject<T>(apiContent)!;
                 return apiResponseDto;
             }
             catch (Exception ex)
@@ -79,13 +79,13 @@ namespace AlatAuth.Business.Adapter
                 ResponseDto dto = new ResponseDto
                 {
                     Message = "Error",
-                    ErrorMessages = new List<string>() { Convert.ToString(ex.InnerException) },
+                    ErrorMessages = new List<string>() { Convert.ToString(ex.InnerException)! },
                     IsSuccess = false,
 
                 };
                 _logger.LogError(ex, "Error Occured");
                 string res = JsonConvert.SerializeObject(dto);
-                T apiResponseDto = JsonConvert.DeserializeObject<T>(res);
+                T apiResponseDto = JsonConvert.DeserializeObject<T>(res)!;
                 return apiResponseDto;
             }
         }
@@ -129,17 +129,17 @@ namespace AlatAuth.Business.Adapter
             // Check if HttpContext is not null
             if (httpContext == null)
             {
-                return null;
+                return null!;
             }
 
             // Retrieve the claims identity from HttpContext
-            var claimsIdentity = httpContext.HttpContext.User.Identity as ClaimsIdentity;
+            var claimsIdentity = httpContext.HttpContext!.User.Identity as ClaimsIdentity;
 
             // Check if claims identity is not null
             if (claimsIdentity == null)
             {
                 // No authenticated user, return null or handle the case as needed
-                return null;
+                return null!;
             }
 
             // Find the claim with the user ID
@@ -153,24 +153,24 @@ namespace AlatAuth.Business.Adapter
 
             // If user ID claim not found, return null or throw an exception based on your requirements
             // You might want to throw an exception if the user ID claim is expected but not found
-            return null;
+            return null!;
         }
         public string UserRole()
         {
             // Check if HttpContext is not null
             if (httpContext == null)
             {
-                return null;
+                return null!;
             }
 
             // Retrieve the claims identity from HttpContext
-            var claimsIdentity = httpContext.HttpContext.User.Identity as ClaimsIdentity;
+            var claimsIdentity = httpContext.HttpContext!.User.Identity as ClaimsIdentity;
 
             // Check if claims identity is not null
             if (claimsIdentity == null)
             {
                 // No authenticated user, return null or handle the case as needed
-                return null;
+                return null!;
             }
 
             // Find the claim with the role
@@ -184,7 +184,7 @@ namespace AlatAuth.Business.Adapter
 
             // If role claim not found, return null or throw an exception based on your requirements
             // You might want to throw an exception if the role claim is expected but not found
-            return null;
+            return null!;
         }
         public void Dispose()
         {

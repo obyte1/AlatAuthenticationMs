@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AlatAuth.Data.Dto;
 
 namespace AlatAuth.Business.Service.Interface
 {
     public interface IBankService
     {
+        Task<ApiResponse> GetBanks();
     }
 }

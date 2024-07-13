@@ -3,62 +3,58 @@ using AlatAuth.Common.Enum;
 using AlatAuth.Common.RepositoryPattern.Interface;
 using AlatAuth.Data.Dto;
 using AlatAuth.Data.Entity;
-using Microsoft.AspNetCore.Identity;
+using Azure;
+using Mapster;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace AlatAuth.Business.Service.Implementation
 {
     public class CustomerService : ICustomerService
     {
-        private readonly IRepository<Customer> _repository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmailSender _emailSender;
 
-
-        public CustomerService(IRepository<Customer> repository)
+        public CustomerService(IUnitOfWork unitOfWork)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<dynamic> CreateCustomer(CustomerRequest request)
+        public async Task<ApiResponse> CreateCustomer(CustomerRequest request)
         {
-            Customer user = null;
-
-            // Check if a customer with the same phone number already exists
-            var existingCustomer = await _repository.Find(x => x.PhoneNumber == request.PhoneNumber);
+            var existingCustomer = await _unitOfWork.CustomerRepo.GetFirstOrDefaultAsync(filter: x => x.PhoneNumber == request.PhoneNumber);
             if (existingCustomer != null)
             {
-                return ResponseHandler.FailureResponse("400", "User created successfully");
+                return ResponseHandler.FailureResponse("400", "Phone number already Exist");
+            }
+            var emailExist = await _unitOfWork.CustomerRepo.GetFirstOrDefaultAsync(filter: x => x.Email == request.Email);
+            if (emailExist != null)
+            {
+                return ResponseHandler.FailureResponse("400", "Email already exist");
             }
 
-            // Create a new customer object
-            var newCustomer = new Customer
+            var lga = await _unitOfWork.LgaRepo.GetFirstOrDefaultAsync(filter: x=>x.Id == request.LGAId);
+            try
             {
-                PhoneNumber = request.PhoneNumber,
-                Email = request.Email,
-                Password = request.Password, // password will be hashed 
-                StateOfResidence = request.StateOfResidence,
-                LGA = request.LGA,
-                ProgressState = ProgressState.Initiated,
-            };
+                await _unitOfWork.BeginTransaction();
+                var newCustomer = new Customer
+                {
+                    PhoneNumber = request.PhoneNumber,
+                    Email = request.Email,
+                    Password = request.Password, // password will be hashed 
+                    StateOfResidenceId = request.StateOfResidenceId,
+                    LGAId = request.LGAId,
+                    ProgressState = ProgressState.Initiated,
+                };
 
-            var result = await _repository.Add(newCustomer);
-            await _unitOfWork.SaveChangesAsync();
+                _unitOfWork.CustomerRepo.Add(newCustomer);
+                await _unitOfWork.SaveChangesAsync();
 
-            if (result.Succeeded)
-            {
+
                 //Generate and send email verification Otp
                 var emailOtp = RandomNumberGenerator.DigitGen();
                 var otp = new OTPEntity
                 {
-                    UserId = user.Id.ToString(),
-                    Email = user.Email,
+                    UserId = newCustomer.Id.ToString(),
+                    Email = newCustomer.Email,
                     ExpiryDate = DateTime.Now.AddMinutes(5),
                     OTP = emailOtp,
                     OtpChannel = OtpChannel.Email,
@@ -67,38 +63,87 @@ namespace AlatAuth.Business.Service.Implementation
                 _unitOfWork.Otp.Add(otp);
                 await _unitOfWork.SaveChangesAsync();
 
-                var emailText = $"Your email verification code is {emailOtp}";
-                var emailSubject = "Email Verification";
-                await _emailSender.SendEmailAsync(user.Email, emailSubject, emailText);
+                //Send otp by calling sms service
+                await Task.Delay(1000);
 
                 await _unitOfWork.CommitTransaction();
-                return ResponseHandler.SuccessResponse("User created successfully", new { otpId = otp.Id });
+                return ResponseHandler.SuccessResponse($"Otp has bee sent to {request.PhoneNumber}", new { otpId = otp.Id, otp = otp.OTP });
             }
-
+            catch (Exception)
+            {
+               await _unitOfWork.RollBack();
+                return ResponseHandler.FailureResponse("500", "An error occured while creating customer");
+            }
 
         }
 
-        public async Task<dynamic> GetCustomers(int pageNumber, int pageSize)
+        public async Task<ApiResponse> GetCustomers(int pageNumber, int pageSize)
         {
-            // Get the total count of customers
-            var totalCustomers = await _repository.CountAsync();
+            var customers = await _unitOfWork.CustomerRepo.GetAll();
 
+            var customersCount = customers.Count();
             // Get the paginated list of customers
-            var customers = await _repository.GetAll()
+            var PaginatedCustomer = customers
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
 
             // Create a response object
             var response = new
             {
-                TotalCount = totalCustomers,
+                TotalCount = customersCount,
                 PageSize = pageSize,
                 PageNumber = pageNumber,
-                Customers = customers
+                Customers = customers.Adapt<List<CustomerResponse>>()
             };
-
             return ResponseHandler.SuccessResponse("Customers retrieved successfully", response);
+        }
+
+        public async Task<ApiResponse> GetLgaByStateId(int stateId)
+        {
+            var lga = await _unitOfWork.LgaRepo.GetAllAsync(filter: x=>x.StateId == stateId);
+            return ResponseHandler.SuccessResponse("LGA retrieved Successfully ", lga);
+        }
+
+        public async Task<ApiResponse> GetState()
+        {
+            var states = await _unitOfWork.stateRepo.GetAll();
+            var response = new
+            {
+                TotalCount = states.Count(),
+                States = states.Adapt<List<object>>()
+            };
+            return ResponseHandler.SuccessResponse("States Retrieved Successfully", response);
+        }
+
+        public async Task<ApiResponse> VerifyOtp(VerifyOtpRequest request)
+        {
+            var otp = await _unitOfWork.Otp.GetFirstOrDefaultAsync(filter: x=>x.Id == request.OtpId);
+            if (otp == null)
+            {
+                return ResponseHandler.FailureResponse("400", "Invalid Otp");
+            }
+            if(otp.OTP != request.Otp)
+            {
+                return ResponseHandler.FailureResponse("400", "Invalid Otp");
+            }
+            if (otp.ExpiryDate < DateTime.Now)
+            {
+                return ResponseHandler.FailureResponse("400", "Otp Expired");
+            }
+            if (otp.Status != OtpStatus.Active)
+            {
+                return ResponseHandler.FailureResponse("400", "Otp has been used");
+            }
+            var customer = await _unitOfWork.CustomerRepo.GetFirstOrDefaultAsync(filter: x=>x.Id == int.Parse(otp.UserId));
+            customer.IsVerified = true;
+            customer.ProgressState = ProgressState.Completed;
+            otp.Status = OtpStatus.Verified;
+            _unitOfWork.Otp.Update(otp);
+            await _unitOfWork.SaveChangesAsync();
+             _unitOfWork.CustomerRepo.Update(customer);
+            await _unitOfWork.SaveChangesAsync();
+            return ResponseHandler.SuccessResponse("Otp Verified Successfully");
         }
     }
 }
